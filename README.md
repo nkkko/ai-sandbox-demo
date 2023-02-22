@@ -1,6 +1,6 @@
 This is an example Python project used in Codeanywhere.
 
-[Try it out](https://app.codeanywhere.com/workspace#https://github.com/Codeanywhere-Templates/python)
+[Try it out](https://app.codeanywhere.com/workspace/create#https://github.com/Codeanywhere-Templates/python)
 
 ### Running the project
 
