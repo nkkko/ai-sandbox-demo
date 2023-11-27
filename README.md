@@ -38,7 +38,7 @@ Welcome to our AI Demo Project, designed to showcase the integration and applica
 
 - `main.py`: Main script for fetching and storing website content.
 - `search.py`: Script to search within the stored data.
-- `chromadb/`: Directory containing ChromaDB client and utilities.
+- `db/`: Directory containing ChromaDB client and utilities.
 - `.env`: Environment file for storing your OpenAI API key.
 
 ## Examples
