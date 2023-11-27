@@ -1,46 +1,59 @@
+import argparse
 import chromadb
-import asyncio
-import logging
+from chromadb.utils import embedding_functions
+import os
+from dotenv import load_dotenv
 
-# Configure Logging
-logging.basicConfig(level=logging.INFO)
+# Load environment variables
+load_dotenv()
+
+# Set your OpenAI key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Configure OpenAI Embedding Function
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+                api_key=OPENAI_API_KEY,
+                model_name="text-embedding-ada-002"
+            )
 
 # Initialize ChromaDB Client
-# Replace with your path or configuration
 chroma_client = chromadb.PersistentClient(path="db")
 
-async def get_all_embeddings(collection_name):
+# Define the collection name
+collection_name = "sitemap_collection"
+
+# Get the collection
+collection = chroma_client.get_collection(name=collection_name, embedding_function=openai_ef)
+
+def search_in_chromadb(query):
     """
-    Asynchronously retrieve all embeddings from a given collection in ChromaDB.
+    Search in ChromaDB for the given query.
+
+    Args:
+    query (str): The search query.
+
+    Returns:
+    List of search results.
     """
-    try:
-        # Get the collection
-        collection = chroma_client.get_collection(name=collection_name)
 
-        # Retrieve all items from the collection
-        results = collection.get(
-            include=["ids", "embeddings", "metadatas", "documents", "uris"]  # Include all relevant data
-        )
+    # Search in the collection
+    search_results = collection.query(
+        query_texts=[query],
+        n_results=5
+    )
 
-        return results
-
-    except Exception as e:
-        logging.error(f"Error retrieving data: {e}")
-        return None
-
-# Example Usage
-async def main():
-    collection_name = "wikipedia_collection"  # Replace with your collection name
-    data = await get_all_embeddings(collection_name)
-    if data:
-        for item in data:
-            print(f"ID: {item.get('ids')}")
-            print(f"Embedding: {item.get('embeddings')}")
-            print(f"Metadata: {item.get('metadatas')}")
-            print(f"Document: {item.get('documents')}")
-            print(f"URI: {item.get('uris')}\n")
-    else:
-        logging.warning("No data found or an error occurred.")
+    return search_results
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description='Search in ChromaDB.')
+    parser.add_argument('query', type=str, help='Search query.')
+    args = parser.parse_args()
+
+    # Perform the search
+    results = search_in_chromadb(args.query)
+
+  # Print the results
+for i in range(len(results['documents'])):
+    print(f"URL: {results['metadatas'][i][0]['url']}")
+    print(f"Content: {results['documents'][i][0]}")  # Print first 200 characters of content
+    print("-" * 50)
