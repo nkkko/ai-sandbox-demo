@@ -1,0 +1,7 @@
+# Environmental Variables
+.env
+
+# venv and Python directories
+python/
+venv/
+
