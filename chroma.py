@@ -17,27 +17,30 @@ async def get_all_embeddings(collection_name):
         # Get the collection
         collection = chroma_client.get_collection(name=collection_name)
 
-        # Query the collection to get all embeddings
-        # Instead of using query_embeddings, we'll use a different approach
+        # Retrieve all items from the collection
         results = collection.get(
-            include=["embeddings"]  # Specify that we want to include embeddings in the result
+            include=["ids", "embeddings", "metadatas", "documents", "uris"]  # Include all relevant data
         )
 
         return results
 
     except Exception as e:
-        logging.error(f"Error retrieving embeddings: {e}")
+        logging.error(f"Error retrieving data: {e}")
         return None
 
 # Example Usage
 async def main():
     collection_name = "wikipedia_collection"  # Replace with your collection name
-    embeddings = await get_all_embeddings(collection_name)
-    if embeddings:
-        for embedding in embeddings:
-            print(embedding)
+    data = await get_all_embeddings(collection_name)
+    if data:
+        for item in data:
+            print(f"ID: {item.get('ids')}")
+            print(f"Embedding: {item.get('embeddings')}")
+            print(f"Metadata: {item.get('metadatas')}")
+            print(f"Document: {item.get('documents')}")
+            print(f"URI: {item.get('uris')}\n")
     else:
-        logging.warning("No embeddings found or an error occurred.")
+        logging.warning("No data found or an error occurred.")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -7,6 +7,8 @@ import json
 import os
 import logging
 import asyncio
+import argparse
+from chromadb.db.base import UniqueConstraintError  # Import the exception
 
 # Load environment variables
 load_dotenv()
@@ -18,9 +20,15 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Initialize ChromaDB Client
-# chroma_client = chromadb.Client() # in memory db
+# chroma_client = chromadb.Client() # in-memory db
 chroma_client = chromadb.PersistentClient(path="db") # persistent db
-collection = chroma_client.create_collection(name="wikipedia_collection")
+
+# Check if the collection already exists, else create it
+collection_name = "wikipedia_collection"
+try:
+    collection = chroma_client.create_collection(name=collection_name)
+except UniqueConstraintError:
+    collection = chroma_client.get_collection(name=collection_name)
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
@@ -84,12 +92,16 @@ async def add_to_chromadb(title, content):
         logging.warning(f"Failed to add {title} to ChromaDB due to missing embeddings.")
 
 # Example Usage
-async def main():
-    title, content = await fetch_wikipedia_page("Pythonidae")
+async def main(page_title):
+    title, content = await fetch_wikipedia_page(page_title)
     if content:
         await add_to_chromadb(title, content)
     else:
         logging.warning(f"Content not found for {title}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description='Fetch Wikipedia Page Content.')
+    parser.add_argument('title', type=str, help='Title of the Wikipedia page')
+    args = parser.parse_args()
+
+    asyncio.run(main(args.title))
