@@ -1,6 +1,7 @@
 from SynthSpyder import fetch_sitemap, parse_sitemap, fetch_and_save_html, default_ef, openai_ef, chroma_client, collection_name
 import argparse
 import asyncio
+import logging
 from tqdm import tqdm
 
 async def main(sitemap_url, n, embedding_function_name):

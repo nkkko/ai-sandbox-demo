@@ -51,7 +51,7 @@ async def fetch_sitemap(url):
         logging.error(f"Error fetching sitemap: {e}")
         return None
 
-def parse_sitemap(sitemap_content, max_urls):
+def parse_sitemap(sitemap_content, max_urls=None):
     """
     Parse the sitemap content and extract a limited number of URLs.
 
@@ -69,10 +69,18 @@ def parse_sitemap(sitemap_content, max_urls):
     root = tree.getroot()
 
     # Define the namespace map for parsing sitemap XML
-    namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+    # Adjusted to handle both http and https namespaces
+    namespaces = {
+        'http': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+        'https': 'https://www.sitemaps.org/schemas/sitemap/0.9'
+    }
 
-    # Extract the URLs from the sitemap
-    urls = [element.text for element in root.findall('.//ns:loc', namespace)]
+    # Try to extract the URLs with http namespace first
+    urls = [element.text for element in root.findall('.//http:loc', namespaces)]
+    
+    # If no URLs found, try with https namespace
+    if not urls:
+        urls = [element.text for element in root.findall('.//https:loc', namespaces)]
 
     # Limit the number of URLs if max_urls is specified
     if max_urls is not None:
