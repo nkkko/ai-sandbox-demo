@@ -61,7 +61,7 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 
 - Generate an article within set context: 
   ```bash
-    codeany ➜ /workspaces/python (main ✗) $ python query.py "tell me a joke about" --s "guardrails" --n 1
+    python query.py "Tell me a joke about " --s "guardrails" --n 1
     Sure, here's a lighthearted joke about guardrails in the context of software development:
 
     Why was the developer afraid to play cards with the guardrails?
