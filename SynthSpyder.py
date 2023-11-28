@@ -22,12 +22,12 @@ logger.setLevel(logging.INFO)  # Set the logging level to INFO
 # Load environment variables
 load_dotenv()
 
-# Set your OpenAI key
+# Set your OpenAI key and configure OpenAI Client
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-# Configure OpenAI Client
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
+# Embeddings functions
+default_ef = embedding_functions.DefaultEmbeddingFunction()
 openai_ef = embedding_functions.OpenAIEmbeddingFunction(
                 api_key=OPENAI_API_KEY,
                 model_name="text-embedding-ada-002"
@@ -36,10 +36,7 @@ openai_ef = embedding_functions.OpenAIEmbeddingFunction(
 # Initialize ChromaDB Client
 # chroma_client = chromadb.Client() # in-memory db
 chroma_client = chromadb.PersistentClient(path="db") # persistent db
-
-# Check if the collection already exists, else create it
 collection_name = "sitemap_collection"
-collection = chroma_client.get_or_create_collection(name=collection_name, embedding_function=openai_ef)
 
 async def fetch_sitemap(url):
     """
@@ -83,7 +80,7 @@ def parse_sitemap(sitemap_content, max_urls):
 
     return urls
 
-async def fetch_and_save_html(url, update_progress):
+async def fetch_and_save_html(url, update_progress, collection):
     """
     Fetch the HTML content of a given URL, extract and clean text from main content elements, 
     and save it to ChromaDB.
@@ -106,13 +103,13 @@ async def fetch_and_save_html(url, update_progress):
         
         text_content = ' '.join(element.get_text(strip=True, separator=' ') for element in main_content)
 
-        save_to_chromadb(url, text_content)
+        save_to_chromadb(url, text_content, collection)
         update_progress()
     except requests.RequestException as e:
         logging.error(f"Error fetching HTML content from {url}: {e}")
 
 
-def save_to_chromadb(url, html_content):
+def save_to_chromadb(url, html_content, collection):
     """
     Save the HTML content to ChromaDB with detailed error handling.
     """
@@ -132,7 +129,7 @@ def save_to_chromadb(url, html_content):
         snippet = html_content[:200]  # Adjust the length as needed
         logging.info(f"Content snippet: {snippet}")
 
-def search_in_chromadb(query, n_results):
+def search_in_chromadb(query, n_results, collection):
     """
     Search in ChromaDB for the given query.
 
@@ -156,13 +153,18 @@ def write_article(prompt):
     """
     Generate an article using the OpenAI API.
     """
-    response = openai_client.chat.completions.create(
-        model='gpt-4-1106-preview',
-        messages=[
-            {"role": "system", "content": "Follow user instructions. Write using Markdown."},
-            {"role": "user", "content": prompt}
-        ]
-    )
-    # Access the 'content' attribute of the last message in the response
-    last_message_content = response.choices[0].message.content
-    return last_message_content
+    try:
+        response = openai_client.chat.completions.create(
+            model='gpt-4-1106-preview',
+            messages=[
+                {"role": "system", "content": "Follow user instructions. Write using Markdown."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        # Access the 'content' attribute of the last message in the response
+        last_message_content = response.choices[0].message.content
+        return last_message_content
+
+    except Exception as e:
+        print(f"An error occurred during article generation: {e}")
+        return None

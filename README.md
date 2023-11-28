@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python within SDE sandbox. This project features capabilities for generating articles using OpenAI's API, and for fetching, storing, and searching web content using ChromaDB.
+Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python within SDE sandbox. This project features capabilities for generating articles using OpenAI's API, and for fetching, storing, and searching web content using [Chroma DB](https://docs.trychroma.com/).
 
 ### Main Features:
 - **Sitemap Fetching and Parsing**: Automates the process of fetching sitemap XML from websites and parsing it to extract URLs.
@@ -35,21 +35,26 @@ There are two ways to set up the environment for this project:
      ```
      pip install openai chromadb python-dotenv bs4 argparse lxml
      ```
-   - Set up an `.env` file with your `OPENAI_API_KEY`.
+   - Set up an `.env` file with your `OPENAI_API_KEY` or don't and just use the default embeddings function (all-MiniLM-L6-v2).
 
 ### Usage
 
 1. **populate.py**: 
-   - Run the script with a sitemap URL to fetch, parse, and store website content.
-   - Usage: `python populate.py [SITEMAP_URL] [--n [MAX_URLS]]`
+   - Run the script with a sitemap URL to fetch, parse, and store website content. Optionally select the embeddings function to use with `--ef`.
+   - Usage: `python populate.py [SITEMAP_URL] [--n [MAX_URLS]] [--ef {default|openai}]`
+   - Example: `python populate.py https://www.example.com/sitemap.xml --n 100 --ef openai`
 
 2. **search.py**:
-   - Perform searches in the stored data.
-   - Usage: `python search.py [SEARCH_QUERY] [--n [NUMBER_OF_RESULTS]]`
+   - Perform searches in the stored data. Optionally select the embeddings function to use with `--ef`.
+   - Usage: `python search.py [SEARCH_QUERY] [--n [NUMBER_OF_RESULTS]] [--ef {default|openai}]`
+   - Example: `python search.py "example search query" --n 5 --ef default`
 
 3. **write.py**:
-   - Generate articles based on a prompt and ChromaDB search terms.
-   - Usage: `python write.py [PROMPT] --s [SEARCH_TERM] --n [NUMBER_OF_RESULTS]`
+   - Generate articles based on a prompt and ChromaDB search terms. Optionally select the embeddings function to use with `--ef`.
+   - Usage: `python write.py [PROMPT] --s [SEARCH_TERM] --n [NUMBER_OF_RESULTS] [--ef {default|openai}]`
+   - Example: `python write.py "Write an article about AI" --s "artificial intelligence" --n 3 --ef openai`
+
+The `--ef` argument allows you to specify which [embeddings function](https://docs.trychroma.com/embeddings) to use when interacting with ChromaDB. By default, `default_ef` is used (all-MiniLM-L6-v2). If you want to use OpenAI's embeddings, specify `--ef openai`.
 
 ## Structure
 
@@ -63,17 +68,17 @@ There are two ways to set up the environment for this project:
 
 ## Examples
 
-- Fetch and store content:
+- Fetch and store 10 first articles from the sitemap:
   ```bash
     python populate.py https://www.daytona.io/sitemap-definitions.xml --n 10
   ```
 
-- Search for a term in the stored content:
+- Search for the first two terms that are closest to the query in the stored content:
   ```bash
     python search.py "SDE" --n 2
   ```
 
-- Generate an article within set context: 
+- Generate an article within set context of the first result from the vector DB: 
   ```bash
     python write.py "Tell me a joke about" --s "guardrails" --n 1
   ```
