@@ -39,23 +39,23 @@ There are two ways to set up the environment for this project:
 
 ### Usage
 
-1. **main.py**: 
+1. **populate.py**: 
    - Run the script with a sitemap URL to fetch, parse, and store website content.
-   - Usage: `python main.py [SITEMAP_URL]`
+   - Usage: `python populate.py [SITEMAP_URL]`
 
 2. **search.py**:
    - Perform searches in the stored data.
    - Usage: `python search.py [SEARCH_QUERY]`
 
-3. **query.py**:
+3. **write.py**:
    - Generate articles based on a prompt and ChromaDB search terms.
-   - Usage: `python generate_article.py [PROMPT] --s [SEARCH_TERM] --n [NUMBER_OF_RESULTS]`
+   - Usage: `python write.py [PROMPT] --s [SEARCH_TERM] --n [NUMBER_OF_RESULTS]`
 
 ## Structure
 
-- `main.py`: Main script for fetching and storing website content.
+- `populate.py`: Populate script for fetching and storing website content inside Chroma DB.
 - `search.py`: Script to search within the stored data.
-- `query.py`: Script to generate articles using OpenAI and ChromaDB to fetch context.
+- `write.py`: Script to generate articles using OpenAI and Chroma DB to fetch context.
 - `db/`: Directory containing ChromaDB client and utilities.
 - `.env`: Environment file for storing your OpenAI API key.
 - `.devcontainer`: Configuration directory with file for setting up the development environment automatically in supported SDEs.
@@ -64,7 +64,7 @@ There are two ways to set up the environment for this project:
 
 - Fetch and store content:
   ```bash
-    python main.py https://www.daytona.io/sitemap-definitions.xml
+    python populate.py https://www.daytona.io/sitemap-definitions.xml
   ```
 
 - Search for a term in the stored content:

@@ -1,18 +1,19 @@
 # pip install openai chromadb python-dotenv bs4 argparse lxml
-from dotenv import load_dotenv
-import openai
-from openai import OpenAI
-import chromadb
-import requests
-import json
-import os
 import logging
-import asyncio
 import argparse
+import asyncio
+from bs4 import BeautifulSoup
+import chromadb
 from chromadb.db.base import UniqueConstraintError  # Import the exception
 from chromadb.utils import embedding_functions
+from dotenv import load_dotenv
+import json
+import openai
+from openai import OpenAI
+import os
+import requests
 import xml.etree.ElementTree as ET
-from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 # Get the root logger
 logger = logging.getLogger()
@@ -53,7 +54,7 @@ async def fetch_sitemap(url):
         logging.error(f"Error fetching sitemap: {e}")
         return None
 
-def parse_sitemap(sitemap_content, max_urls=None):
+def parse_sitemap(sitemap_content, max_urls):
     """
     Parse the sitemap content and extract a limited number of URLs.
 
@@ -82,7 +83,7 @@ def parse_sitemap(sitemap_content, max_urls=None):
 
     return urls
 
-async def fetch_and_save_html(url):
+async def fetch_and_save_html(url, update_progress):
     """
     Fetch the HTML content of a given URL, extract and clean text from elements 
     with class 'page-content-container', and save it to ChromaDB.
@@ -97,6 +98,7 @@ async def fetch_and_save_html(url):
         text_content = ' '.join(element.get_text(strip=True, separator=' ') for element in content_elements)
 
         save_to_chromadb(url, text_content)
+        update_progress()
     except requests.RequestException as e:
         logging.error(f"Error fetching HTML content from {url}: {e}")
 
@@ -120,30 +122,37 @@ def save_to_chromadb(url, html_content):
         snippet = html_content[:200]  # Adjust the length as needed
         logging.info(f"Content snippet: {snippet}")
 
-async def main(sitemap_url):
+def search_in_chromadb(query, n_results):
     """
-    Main function to fetch, parse the sitemap, and save HTML content to ChromaDB.
+    Search in ChromaDB for the given query.
+
+    Args:
+    query (str): The search query.
+    n_results (int): Number of search results to return.
+
+    Returns:
+    List of search results.
     """
-    # Fetch the sitemap
-    sitemap_xml = await fetch_sitemap(sitemap_url)
-    if not sitemap_xml:
-        logging.error("Failed to fetch sitemap.")
-        return
 
-    # Parse the sitemap to get URLs
-    urls = parse_sitemap(sitemap_xml)
-    if not urls:
-        logging.error("No URLs found in sitemap.")
-        return
+    # Search in the collection
+    search_results = collection.query(
+        query_texts=[query],
+        n_results=n_results
+    )
 
-    # Fetch and save HTML content of each URL
-    tasks = [fetch_and_save_html(url) for url in urls]
-    await asyncio.gather(*tasks)
-    pass
+    return search_results
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Fetch Sitemap Content.')
-    parser.add_argument('sitemap_url', type=str, help='Full URL of sitemap.xml file.')
-    args = parser.parse_args()
-
-    asyncio.run(main(args.sitemap_url))
+def write_article(prompt):
+    """
+    Generate an article using the OpenAI API.
+    """
+    response = openai_client.chat.completions.create(
+        model='gpt-4-1106-preview',
+        messages=[
+            {"role": "system", "content": "Follow user instructions. Write using Markdown."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    # Access the 'content' attribute of the last message in the response
+    last_message_content = response.choices[0].message.content
+    return last_message_content
