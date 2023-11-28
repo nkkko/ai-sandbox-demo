@@ -48,7 +48,7 @@ def search_in_chromadb(query, n_results):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Search in ChromaDB.')
     parser.add_argument('query', type=str, help='Search query.')
-    parser.add_argument('--n', type=int, default=5, help='Number of results to return')
+    parser.add_argument('--n', type=int, default=5, help='Number of results to return.')
     args = parser.parse_args()
 
     # Perform the search

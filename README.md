@@ -2,12 +2,13 @@
 
 ## Project Overview
 
-Welcome to our AI Demo Project, designed to showcase the integration and application of AI technologies in Python using Codeanywhere as a sandbox environment. This project demonstrates the use of OpenAI's API and ChromaDB to fetch, store, and search web content effectively. 
+Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python with Codeanywhere. This project now includes features for generating articles using OpenAI's API, along with existing functionality for fetching, storing, and searching web content using ChromaDB.
 
 ### Main Features:
 - **Sitemap Fetching and Parsing**: Automates the process of fetching sitemap XML from websites and parsing it to extract URLs.
 - **Content Extraction and Storage**: Retrieves and stores web page content in ChromaDB, a versatile database system.
 - **AI-Powered Search**: Employs OpenAI's embedding functions for efficient and intelligent content search within ChromaDB.
+- **Article Generation**: Generates articles based on user prompts and search terms, utilizing OpenAI's GPT-4 model.
 
 ## Getting Started
 
@@ -34,10 +35,15 @@ Welcome to our AI Demo Project, designed to showcase the integration and applica
    - Perform searches in the stored data.
    - Usage: `python search.py [SEARCH_QUERY]`
 
+3. **query.py**:
+   - Generate articles based on a prompt and ChromaDB search terms.
+   - Usage: `python generate_article.py [PROMPT] --s [SEARCH_TERM] --n [NUMBER_OF_RESULTS]`
+
 ## Structure
 
 - `main.py`: Main script for fetching and storing website content.
 - `search.py`: Script to search within the stored data.
+- `query.py`: Script to generate articles using OpenAI and ChromaDB to fetch context.
 - `db/`: Directory containing ChromaDB client and utilities.
 - `.env`: Environment file for storing your OpenAI API key.
 
@@ -51,6 +57,11 @@ Welcome to our AI Demo Project, designed to showcase the integration and applica
 - Search for a term in the stored content:
   ```
   python search.py "AI technologies"
+  ```
+
+- Generate an article within set context: 
+  ```
+  python generate_article.py "Tell me a joke about " --s "Artificial Intelligence" --n 3
   ```
 
 ## Contributing
