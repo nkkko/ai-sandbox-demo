@@ -1,8 +1,8 @@
-# AI Demo Project Using Codeanywhere
+# AI Demo Project Using SDE Sandbox
 
 ## Project Overview
 
-Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python with Codeanywhere. This project now includes features for generating articles using OpenAI's API, along with existing functionality for fetching, storing, and searching web content using ChromaDB.
+Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python within SDE sandbox. This project now includes features for generating articles using OpenAI's API, along with existing functionality for fetching, storing, and searching web content using ChromaDB.
 
 ### Main Features:
 - **Sitemap Fetching and Parsing**: Automates the process of fetching sitemap XML from websites and parsing it to extract URLs.
@@ -13,21 +13,29 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 ## Getting Started
 
 ### Prerequisites
+- Access to an SDE such as Codeanywhere or Daytona.io which supports Dev Container Specification
 - Python 3.x
-- Access to Codeanywhere or a similar cloud-based development environment.
 - OpenAI API key
 
 ### Installation
-1. Clone the repository to your Codeanywhere container.
-2. Install necessary packages:
-   ```
-   pip install -r requirements.txt
-   ```
-   Or run:
-   ```
-   pip install openai chromadb python-dotenv bs4 argparse lxml
-   ```
-3. Set up an `.env` file with your `OPENAI_API_KEY`.
+There are two ways to set up the environment for this project:
+
+1. **Using an SDE**:
+   - For users of Codeanywhere, Daytona.io, Codespaces, or VS Code, the environment can be automatically set up using `devcontainer.json`. This provides a preconfigured environment where scripts can be used directly.
+   - Just point the SDE to the Git repository url: https://github.com/nkkko/ca-ai-demo
+   - Set up an `.env` file with your `OPENAI_API_KEY`.
+
+2. **Manual Setup**:
+   - Clone the repository to your workspace or local environment.
+   - Install necessary packages:
+     ```
+     pip install -r requirements.txt
+     ```
+     Or run:
+     ```
+     pip install openai chromadb python-dotenv bs4 argparse lxml
+     ```
+   - Set up an `.env` file with your `OPENAI_API_KEY`.
 
 ### Usage
 
@@ -50,22 +58,25 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 - `query.py`: Script to generate articles using OpenAI and ChromaDB to fetch context.
 - `db/`: Directory containing ChromaDB client and utilities.
 - `.env`: Environment file for storing your OpenAI API key.
+- `.devcontainer`: Configuration directory with file for setting up the development environment automatically in supported SDEs.
 
 ## Examples
 
 - Fetch and store content:
   ```bash
-    python main.py https://example.com/sitemap.xml
+    python main.py https://www.daytona.io/sitemap-definitions.xml
   ```
 
 - Search for a term in the stored content:
   ```bash
-    python search.py "AI technologies"
+    python search.py "SDE"
   ```
 
 - Generate an article within set context: 
   ```bash
     python query.py "Tell me a joke about " --s "guardrails" --n 1
+  ```
+  ```bash
     Sure, here's a lighthearted joke about guardrails in the context of software development:
 
     Why was the developer afraid to play cards with the guardrails?
