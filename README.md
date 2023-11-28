@@ -13,7 +13,7 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 ## Getting Started
 
 ### Prerequisites
-- Access to an SDE such as Codeanywhere or Daytona.io which supports Dev Container Specification
+- Access to an SDE such as Daytona.io which supports Dev Container Specification
 - Python 3.x
 - OpenAI API key
 
@@ -21,7 +21,7 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 There are two ways to set up the environment for this project:
 
 1. **Using an SDE**:
-   - For users of Codeanywhere, Daytona.io, Codespaces, or VS Code, the environment can be automatically set up using `devcontainer.json`. This provides a preconfigured environment where scripts can be used directly.
+   - Users of Daytona.io, Codeanywhere, Codespaces, or VS Code can auto-configure their environment with devcontainer.json, allowing for instant start.
    - Just point the SDE to the Git repository url: https://github.com/nkkko/ca-ai-demo
    - Set up an `.env` file with your `OPENAI_API_KEY`.
 
