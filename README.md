@@ -22,7 +22,7 @@ There are two ways to set up the environment for this project:
 
 1. **Using an SDE**:
    - Users of Daytona.io, Codeanywhere, Codespaces, or VS Code can auto-configure their environment with devcontainer.json, allowing for instant start.
-   - Just point the SDE to the Git repository url: https://github.com/nkkko/ca-ai-demo
+   - Just point the SDE to the Git repository url: https://github.com/nkkko/ai-sandbox-demo
    - Set up an `.env` file with your `OPENAI_API_KEY`.
 
 2. **Manual Setup**:
