@@ -23,6 +23,10 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
    ```
    pip install -r requirements.txt
    ```
+   Or run:
+   ```
+   pip install openai chromadb python-dotenv bs4 argparse lxml
+   ```
 3. Set up an `.env` file with your `OPENAI_API_KEY`.
 
 ### Usage
