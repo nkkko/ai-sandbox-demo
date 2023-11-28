@@ -50,18 +50,23 @@ Welcome to our AI Demo Project, showcasing the integration and application of AI
 ## Examples
 
 - Fetch and store content:
-  ```
-  python main.py https://example.com/sitemap.xml
+  ```bash
+    python main.py https://example.com/sitemap.xml
   ```
 
 - Search for a term in the stored content:
-  ```
-  python search.py "AI technologies"
+  ```bash
+    python search.py "AI technologies"
   ```
 
 - Generate an article within set context: 
-  ```
-  python generate_article.py "Tell me a joke about " --s "Artificial Intelligence" --n 3
+  ```bash
+    codeany ➜ /workspaces/python (main ✗) $ python query.py "tell me a joke about" --s "guardrails" --n 1
+    Sure, here's a lighthearted joke about guardrails in the context of software development:
+
+    Why was the developer afraid to play cards with the guardrails?
+
+    Because every time they tried to deal, the guardrails kept reminding them to stay within their limits! 🚧😄
   ```
 
 ## Contributing
