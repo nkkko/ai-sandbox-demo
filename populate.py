@@ -12,6 +12,8 @@ async def main(sitemap_url, n):
     if not sitemap_xml:
         logging.error("Failed to fetch sitemap.")
         return
+    else:
+        print(f"Successfully fetched: {sitemap_url}")
 
     # Parse the sitemap to get URLs
     urls = parse_sitemap(sitemap_xml, n)

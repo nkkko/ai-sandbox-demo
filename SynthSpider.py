@@ -85,22 +85,32 @@ def parse_sitemap(sitemap_content, max_urls):
 
 async def fetch_and_save_html(url, update_progress):
     """
-    Fetch the HTML content of a given URL, extract and clean text from elements 
-    with class 'page-content-container', and save it to ChromaDB.
+    Fetch the HTML content of a given URL, extract and clean text from main content elements, 
+    and save it to ChromaDB.
     """
     try:
         response = await asyncio.to_thread(requests.get, url)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
         
-        # Extract elements with class 'page-content-container' and get their text
-        content_elements = soup.find_all(class_='definitions')
-        text_content = ' '.join(element.get_text(strip=True, separator=' ') for element in content_elements)
+        # Remove script and style elements
+        for script_or_style in soup(['script', 'style', 'header', 'footer', 'nav']):
+            script_or_style.extract()
+        
+        # Extract main content using common content markers
+        main_content = soup.find_all(['article', 'main', 'div'], class_=lambda x: x and 'content' in x)
+        
+        # If no common content markers found, fall back to extracting all text
+        if not main_content:
+            main_content = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'])
+        
+        text_content = ' '.join(element.get_text(strip=True, separator=' ') for element in main_content)
 
         save_to_chromadb(url, text_content)
         update_progress()
     except requests.RequestException as e:
         logging.error(f"Error fetching HTML content from {url}: {e}")
+
 
 def save_to_chromadb(url, html_content):
     """

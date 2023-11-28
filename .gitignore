@@ -1,7 +1,23 @@
 # Environmental Variables
 .env
 
-# venv and Python directories
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Envs and Python directories
 python/
+.env
+.venv
+env/
 venv/
+ENV/
+env.bak/
+venv.bak/
+
+# DB
 db/
+
+# Distribution / packaging
+.Python

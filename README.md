@@ -2,19 +2,19 @@
 
 ## Project Overview
 
-Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python within SDE sandbox. This project now includes features for generating articles using OpenAI's API, along with existing functionality for fetching, storing, and searching web content using ChromaDB.
+Welcome to our AI Demo Project, showcasing the integration and application of AI technologies in Python within SDE sandbox. This project features capabilities for generating articles using OpenAI's API, and for fetching, storing, and searching web content using ChromaDB.
 
 ### Main Features:
 - **Sitemap Fetching and Parsing**: Automates the process of fetching sitemap XML from websites and parsing it to extract URLs.
 - **Content Extraction and Storage**: Retrieves and stores web page content in ChromaDB, a versatile database system.
 - **AI-Powered Search**: Employs OpenAI's embedding functions for efficient and intelligent content search within ChromaDB.
-- **Article Generation**: Generates articles based on user prompts and search terms, utilizing OpenAI's GPT-4 model.
+- **Article Generation**: Generates articles based on user prompts and search terms, utilizing OpenAI's GPT-4 turbo model.
 
 ## Getting Started
 
 ### Prerequisites
 - Access to an SDE such as Daytona.io which supports Dev Container Specification
-- Python 3.x
+- Python >3.10
 - OpenAI API key
 
 ### Installation
@@ -41,11 +41,11 @@ There are two ways to set up the environment for this project:
 
 1. **populate.py**: 
    - Run the script with a sitemap URL to fetch, parse, and store website content.
-   - Usage: `python populate.py [SITEMAP_URL]`
+   - Usage: `python populate.py [SITEMAP_URL] [--n [MAX_URLS]]`
 
 2. **search.py**:
    - Perform searches in the stored data.
-   - Usage: `python search.py [SEARCH_QUERY]`
+   - Usage: `python search.py [SEARCH_QUERY] [--n [NUMBER_OF_RESULTS]]`
 
 3. **write.py**:
    - Generate articles based on a prompt and ChromaDB search terms.
@@ -53,9 +53,10 @@ There are two ways to set up the environment for this project:
 
 ## Structure
 
-- `populate.py`: Populate script for fetching and storing website content inside Chroma DB.
+- `SynthSpyder.py`: Core module containing the logic for fetching, parsing, storing, and searching.
+- `populate.py`: Script for populating ChromaDB with content from a sitemap.
 - `search.py`: Script to search within the stored data.
-- `write.py`: Script to generate articles using OpenAI and Chroma DB to fetch context.
+- `write.py`: Script to generate articles using OpenAI and ChromaDB to fetch context.
 - `db/`: Directory containing ChromaDB client and utilities.
 - `.env`: Environment file for storing your OpenAI API key.
 - `.devcontainer`: Configuration directory with file for setting up the development environment automatically in supported SDEs.
@@ -64,21 +65,19 @@ There are two ways to set up the environment for this project:
 
 - Fetch and store content:
   ```bash
-    python populate.py https://www.daytona.io/sitemap-definitions.xml
+    python populate.py https://www.daytona.io/sitemap-definitions.xml --n 10
   ```
 
 - Search for a term in the stored content:
   ```bash
-    python search.py "SDE"
+    python search.py "SDE" --n 2
   ```
 
 - Generate an article within set context: 
   ```bash
-    python query.py "Tell me a joke about " --s "guardrails" --n 1
+    python write.py "Tell me a joke about" --s "guardrails" --n 1
   ```
   ```bash
-    Sure, here's a lighthearted joke about guardrails in the context of software development:
-
     Why was the developer afraid to play cards with the guardrails?
 
     Because every time they tried to deal, the guardrails kept reminding them to stay within their limits! 🚧😄
@@ -96,4 +95,4 @@ Contributions to enhance this demo project are welcomed. Please adhere to standa
 
 ---
 
-*This README is part of an AI Demo Project using Codeanywhere as a sandbox environment for AI projects. It aims to guide users through the setup, usage, and contribution to the project.*
+*This README is part of an AI Demo Project using SDE as a sandbox environment for AI projects. It aims to guide users through the setup, usage, and contribution to the project.*
