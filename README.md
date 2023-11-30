@@ -58,7 +58,7 @@ The `--ef` argument allows you to specify which [embeddings function](https://do
 
 ## Structure
 
-- `SynthSpyder.py`: Core module containing the logic for fetching, parsing, storing, and searching.
+- `SynthSpider.py`: Core module containing the logic for fetching, parsing, storing, and searching.
 - `populate.py`: Script for populating ChromaDB with content from a sitemap.
 - `search.py`: Script to search within the stored data.
 - `write.py`: Script to generate articles using OpenAI and ChromaDB to fetch context.

@@ -1,4 +1,4 @@
-from SynthSpyder import search_in_chromadb, default_ef, openai_ef, chroma_client, collection_name
+from SynthSpider import search_in_chromadb, default_ef, openai_ef, chroma_client, collection_name
 import argparse
 
 if __name__ == "__main__":
